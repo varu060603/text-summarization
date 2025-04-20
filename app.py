@@ -1,19 +1,15 @@
 import streamlit as st
-import openai
 import os
+import openai
 
-# Set your Groq API key here or load from environment variable
-api_key = "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"
-api_base = "https://api.groq.com/openai/v1"  # Groq endpoint for OpenAI-compatible APIs
-
+# Use the new client-style OpenAI initialization (Groq-compatible)
 client = openai.OpenAI(
-    base_url = api_base,
-    api_key=api_key
+    base_url="https://api.groq.com/openai/v1",
+    api_key=os.environ.get("GROQ_API_KEY")
 )
 
 st.title("📝 Text Summarization Tool")
 
-# Input method: Paste text or upload file
 input_method = st.radio("Choose input method:", ("Paste Text", "Upload File"))
 
 text = ""
@@ -30,7 +26,7 @@ if text:
         with st.spinner("Summarizing..."):
             try:
                 response = client.chat.completions.create(
-                    model="llama3-70b-8192",
+                    model="gpt-3.5-turbo",
                     messages=[
                         {"role": "system", "content": "You are a helpful assistant that summarizes long text."},
                         {"role": "user", "content": f"Please summarize the following text:\n\n{text}"}
